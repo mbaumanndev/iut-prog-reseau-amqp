@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+    webmvc:
+        restart: 'no'
+        image: webmvc
+        depends_on:
+            - rabbit
+        build:
+            context: .
+            dockerfile: ./src/IutInfo.ProgReseau.RabbitClient/Dockerfile
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://0.0.0.0:80
+        ports:
+            - 5000:80
+
+    webapi:
+        restart: 'no'
+        image: webapi
+        depends_on:
+            - rabbit
+            - webmvc
+        build:
+            context: .
+            dockerfile: ./src/IutInfo.ProgReseau.RabbitServer/Dockerfile
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://0.0.0.0:80
+        ports:
+            - 5001:80
+
+    rabbit:
+        restart: 'no'
+        image: rabbitmq:management-alpine
+        ports:
+            - 15672:15672
+            - 5672:5672
+            - 5671:5671
