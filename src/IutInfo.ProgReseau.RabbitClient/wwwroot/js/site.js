@@ -7,6 +7,12 @@
     function(e) {
       e.preventDefault();
 
+      connection.invoke("SendMessage", $("#text").val()).then(function() {
+        $('#form')[0].reset();
+      }).catch(function (err) {
+        return console.error(err.toString());
+      })
+      /*
       $.ajax({
         url: '/post',
         method: 'post',
@@ -14,7 +20,7 @@
         success: function() {
           $('#form')[0].reset();
         }
-      });
+      });*/
     });
 
   connection.on("Rabbit", function (content) {
